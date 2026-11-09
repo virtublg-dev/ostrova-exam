@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIRTU VR — Экзамен администратора (Острова)</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#5b3df5;--bd:#dfe3ee;--ok:#12805c;--bad:#c0392b}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1117;--card:#181b24;--tx:#e8eaf2;--mut:#98a2b3;--bd:#2a2f3d}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:12px 0}
+h1{font-size:22px;margin:8px 0}h2{font-size:18px;margin:0 0 8px}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:96px;resize:vertical}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{opacity:.5}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.q{font-weight:600;margin-bottom:8px}.n{color:var(--ac)}
+.mut{color:var(--mut);font-size:14px}.warn{color:var(--bad);font-weight:600}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;max-height:320px;overflow:auto;font-size:14px}
+.hide{display:none}
+</style></head><body><div class="wrap">
+<h1>VIRTU VR — Экзамен администратора</h1>
+<div class="mut">Клуб: ТРЦ «Острова», Мухина, 114</div>
+
+<div id="start" class="card">
+<h2>Перед началом</h2>
+<ul class="mut"><li>Вопросов: 50. Время: 60 минут, таймер запускается после кнопки «Начать».</li>
+<li>Отвечайте своими словами, по памяти. Вставка текста в поля заблокирована.</li>
+<li>Не переключайтесь на другие вкладки и приложения: переключения считаются и видны проверяющему.</li>
+<li>Ответы сохраняются в браузере, пока вы не закрыли страницу. В конце вы отправите готовый текст ответов Егору.</li></ul>
+<label for="fio">Фамилия, имя</label><input id="fio" autocomplete="name" placeholder="Например: Иванова Мария">
+<label for="role">Должность</label>
+<select id="role"><option>Администратор (стажёр)</option><option>Администратор</option></select>
+<p><button id="go">Начать</button></p>
+<div id="err" class="warn"></div>
+</div>
+
+<div id="exam" class="hide">
+<div class="bar"><span id="prog">Отвечено: 0 из 50</span><span id="timer">60:00</span></div>
+<div id="qs"></div>
+<div class="card"><p class="mut">Проверьте ответы. После нажатия «Завершить» изменить их нельзя.</p>
+<button id="fin">Завершить экзамен</button></div>
+</div>
+
+<div id="done" class="hide card">
+<h2>Экзамен завершён</h2>
+<p>Теперь отправьте результат Егору: нажмите «Скопировать» и вставьте текст в Telegram.</p>
+<p><button id="copy">Скопировать ответы</button></p>
+<div id="msg" class="mut"></div>
+<pre id="out"></pre>
+</div>
+</div>
+<script>
+var Q=["Перечислите (по памяти) игры, где передвижение — «руками» (Gorilla-Tag), и отдельно — где движение левым стиком.", "Blade and Sorcery — распишите управление: ходьба, удар ногой, прыжок, меню, брать предмет, подтянуть предмет издалека, выбор/использование магии.", "По памяти: в каких из наших игр мультиплеера НЕТ (только одиночные), а какие — с онлайном/кооперативом?", "Another Door: Escape Room — на сколько игроков, сколько примерно длится и как запускается совместная игра?", "Blade and Sorcery. Чем отличаются режимы SandBox и Crystal Hunt (что доступно сразу, как получают оружие/магию)?", "Private Property. Распишите управление: стрельба, взаимодействие с оружием при перезарядке, телепорт, колесо выбора оружия, пауза.", "Bar Fight. Управление: движение, взять/держать, использовать предмет, меню (телефон), и что делать, если персонажа «вырубили».", "VRChat. Опишите порядок входа и управление: старт после загрузки, чем открыть меню, как сменить аватар, как выбрать мир, как ходить/жестикулировать, как переключить на телепорт.", "Forever Pets. Управление: взять питомца/погладить, взять предмет (мячик, расчёска, лента), перемещение по комнате.", "Dungeon Free. Управление: передвижение, атака/использование, поворот.", "Big Scary. Управление: передвижение, взять фонарик/предмет, как бегать.", "Animal Blocks. Как передвигаться и как строить/ломать блоки.", "Clamb. Опишите механику передвижения (как «ходят» по горе) и что происходит при срыве.", "Private Property. Распишите ПОЛНЫЙ порядок создания сетевой игры: режим, регион, шаги хоста (карта, приватность, пароль) и как подключаются остальные.", "Bar Fight. Как запустить мультиплеер (через что, какая вкладка, какие кнопки, кто «создаёт» матч)? Укажите нюанс со стабильностью.", "Animal Blocks. Как зайти в сетевую игру, какие два варианта подключения, сколько игроков и есть ли кросс-плей?", "Big Scary. Как организовать совместную игру с друзьями и сколько человек в кооперативе?", "Another Door: Escape Room. Как запускается игра на двоих (кто и что делает)?", "Animal Company. Как начать сетевую игру (где берётся игра, какие серверы)?", "Клиент пришёл с ребёнком 8 лет, они в первый раз. Какую игру предложите и как объясните управление за 30 секунд?", "Компания из 4 друзей хочет играть вместе. Назовите 3 игры для кооператива и как запустить совместную игру в одной из них.", "Игроку в шлеме стало плохо (укачивание). Ваши действия по шагам и какую игру предложите после перерыва?", "Игрок застрял в игре (не может взять предмет, не реагирует контроллер). Что проверяете и нажимаете по порядку?", "Какие игры у нас только одиночные и какие подойдут для гостя, который никогда не играл в VR?", "Опишите ПОЛНЫЙ порядок подготовки и запуска квеста: пространство, запуск сервера, какие параметры задаются, калибровка зоны и шлемов, старт.", "Как ставится/устанавливается квест на шлем (какая папка, как подключить, какой файл запустить)?", "Шлем не подключается к серверу квеста. Что проверить (сеть, VPN)? Как исправить неправильную высоту шлема?", "Максимум игроков одновременно в одной квест-сессии: а) 6 б) 4 в) 8 г) 10", "Сервер квеста запускается файлом... (в папке vrcaveLite) а) start.bat б) server.exe в) run.cmd г) vrcave.app", "Калибровка шлема квеста: шлем кладут в центр зоны и нажимают... а) Home на правом контроллере б) A в) Calibrate Player г) Start", "Bar Fight: мультиплеер не создаётся / игроки не видят друг друга. Назовите вероятные причины и что проверить.", "Игра вылетела или зависла во время сеанса. Что делаете и что говорите гостю?", "Квест: один шлем не заходит на сервер, остальные в игре. Что проверяете в первую очередь?", "Blade and Sorcery, режим Crystal Hunt: ребёнку доступна только одна магия и нет оружия. Что это за режим и что нужно делать?", "VRChat: клиент хочет русскоязычный мир, но вокруг иностранные. Где искать и что делать?", "Клиент сравнивает: «у конкурентов дешевле». Ваш скрипт (что НЕ делаем, что говорим).", "Клиент просит «без предоплаты». Как отвечаете?", "Ребёнок в игре упал/ударился (без травмы). Ваши действия и что говорите ребёнку и родителю?", "Много гостей, вы заняты обслуживанием, заходят новые клиенты. Что говорите и делаете?", "Возражение клиента «подумаем». Ваш скрипт, чтобы не потерять клиента.", "Зачем всегда включаем трансляцию игры на телевизор?", "Клиент говорит «дорого». Ваш скрипт по шагам: что НЕ делаем, что уточняем, что предлагаем.", "Ребёнок боится надевать шлем. Опишите порядок действий (4 шага).", "Что обязательно говорим клиенту про время ПЕРЕД запуском игры и зачем?", "Стандарт заботы перед каждым гостем: что проверяем, что говорим при надевании шлема, и как обрабатываем оборудование после клиента.", "Родитель привёл ребёнка младше допустимого возраста, хотя знал о запрете. Ваш скрипт (мягко → альтернатива → твёрдо).", "Какие 4 основных вопроса задаём клиенту при запросе на ДР и в каком порядке?", "Порядок действий, если родитель недоволен (любая причина).", "Когда можно уменьшить пакет ДР, а когда увеличить? Возвращаем ли деньги за «не пришедших»?", "Назовите минимум 3 запрещённые фразы клиенту и чем их заменить."];
+var DUR=60*60, KEY='virtu_exam_ostrova_v1';
+var state={fio:'',role:'',start:0,tabs:0,hidden:0,pastes:0,ans:{},done:false};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function load(){try{var s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return null}
+function $(i){return document.getElementById(i)}
+function show(id){['start','exam','done'].forEach(function(x){$(x).classList.toggle('hide',x!==id)})}
+function build(){
+ var h='';
+ Q.forEach(function(t,i){
+  h+='<div class="card"><div class="q"><span class="n">Вопрос '+(i+1)+'.</span> '+t.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</div><textarea data-i="'+i+'" placeholder="Ваш ответ"></textarea></div>';
+ });
+ $('qs').innerHTML=h;
+ var ta=document.querySelectorAll('textarea');
+ for(var k=0;k<ta.length;k++){(function(el){
+  el.value=state.ans[el.dataset.i]||'';
+  el.addEventListener('input',function(){state.ans[el.dataset.i]=el.value;save();prog()});
+  el.addEventListener('paste',function(e){e.preventDefault();state.pastes++;save();$('prog').title='Вставка заблокирована'});
+  el.addEventListener('drop',function(e){e.preventDefault()});
+ })(ta[k])}
+ prog();
+}
+function prog(){var n=0;for(var k in state.ans){if((state.ans[k]||'').trim())n++}$('prog').textContent='Отвечено: '+n+' из '+Q.length}
+function left(){return Math.max(0,DUR-Math.floor((Date.now()-state.start)/1000))}
+function tick(){
+ if(state.done)return;
+ var s=left(),m=Math.floor(s/60),r=s%60;
+ $('timer').textContent=(m<10?'0':'')+m+':'+(r<10?'0':'')+r;
+ if(s<=0){finish(true)}
+}
+function resultText(auto){
+ var d=new Date();
+ var used=Math.min(DUR,Math.floor((Date.now()-state.start)/1000));
+ var t='VIRTU VR — Экзамен администратора. Клуб: Острова\n';
+ t+='ФИО: '+state.fio+'\nДолжность: '+state.role+'\n';
+ t+='Дата сдачи: '+d.toLocaleString('ru-RU')+'\n';
+ t+='Затрачено: '+Math.floor(used/60)+' мин из 60'+(auto?' (время вышло, автосдача)':'')+'\n';
+ t+='Переключений вкладок: '+state.tabs+', вне экзамена: '+Math.round(state.hidden/60)+' мин\n';
+ t+='Попыток вставки текста: '+state.pastes+'\n\n';
+ Q.forEach(function(q,i){t+='Вопрос '+(i+1)+': '+q+'\nОтвет: '+((state.ans[i]||'').trim()||'—')+'\n\n'});
+ return t;
+}
+function finish(auto){
+ if(state.done)return;
+ if(!auto&&!confirm('Завершить экзамен? Изменить ответы будет нельзя.'))return;
+ state.done=true;state.out=resultText(auto);save();showDone();
+}
+function showDone(){show('done');$('out').textContent=state.out}
+var hideAt=0;
+document.addEventListener('visibilitychange',function(){
+ if(!state.start||state.done)return;
+ if(document.hidden){hideAt=Date.now();state.tabs++}
+ else if(hideAt){state.hidden+=Math.round((Date.now()-hideAt)/1000);hideAt=0}
+ save();
+});
+$('go').onclick=function(){
+ var f=$('fio').value.trim();
+ if(f.split(/\s+/).length<2){$('err').textContent='Введите фамилию и имя.';return}
+ state.fio=f;state.role=$('role').value;state.start=Date.now();save();begin();
+};
+function begin(){show('exam');build();tick();setInterval(tick,1000)}
+$('fin').onclick=function(){finish(false)};
+$('copy').onclick=function(){
+ var t=state.out;
+ function ok(){$('msg').textContent='Скопировано. Вставьте текст в сообщение Егору.'}
+ function fallback(){var r=document.createRange();r.selectNodeContents($('out'));var s=getSelection();s.removeAllRanges();s.addRange(r);$('msg').textContent='Текст выделен: нажмите «Копировать» в меню телефона или Ctrl+C.'}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fallback)}else{fallback()}
+};
+window.addEventListener('beforeunload',function(e){if(state.start&&!state.done){e.preventDefault();e.returnValue=''}});
+var s0=load();
+if(s0&&s0.start){state=s0;if(state.done){showDone()}else{begin()}}
+</script></body></html>
